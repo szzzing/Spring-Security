@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="securityMapper">
+
+	<select id="selectUserById" resultMap="UserDetailsSet">
+		SELECT *
+		FROM MEMBER
+		WHERE ID = #{username}
+	</select>
+	
+
+  	<resultMap type="UserDetails" id="UserDetailsSet">
+		<id column="ID" property="id" />
+		<result column="PW" property="pw" />
+		<result column="EMAIL" property="email" />
+		<result column="ENROLL_DATE" property="enrollDate" />
+		<result column="ENABLED" property="enabled" />
+		<result column="AUTHORITY" property="authority" />
+	</resultMap>
+</mapper>
