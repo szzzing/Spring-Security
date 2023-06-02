@@ -13,6 +13,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 @Configuration
+@ComponentScan(basePackages = {"com.sz.reminiscene.service", "com.sz.reminiscene.repository"})
 public class RootConfig {
 
 	@Autowired

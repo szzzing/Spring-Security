@@ -7,10 +7,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import com.sz.reminiscene.security.CustomAuthenticationProvider;
 import com.sz.reminiscene.security.handler.LoginFailureHandler;
@@ -42,27 +45,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	// AuthenticationProvider 등록
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth
-			.authenticationProvider(customAuthenticationProvider);
-//			.jdbcAuthentication()
-//			.passwordEncoder(passwordEncoder())
-//			.dataSource(dataSource)
-//			.usersByUsernameQuery("select id, pw, enabled from Member where id=?")
-//			.authoritiesByUsernameQuery("select id, authority from Member where id=?");
+		auth.authenticationProvider(customAuthenticationProvider);
 	}
 	
 	// http 요청에 대한 설정
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
+		
+		CharacterEncodingFilter filter = new CharacterEncodingFilter();
+		filter.setEncoding("UTF-8");
+		filter.setForceEncoding(true);
+		http.addFilterBefore(filter, CsrfFilter.class);
+		
+		http
 		// 권한 설정
-			.antMatchers("/").authenticated()
-			.antMatchers("/login").permitAll()
-			.antMatchers("/admin**").hasRole("A")
+		.authorizeRequests()
+			.antMatchers("/", "/login", "/join").permitAll()
+			.antMatchers("/admin/**").hasRole("A")
 			.and()
 		// 로그인폼 설정
 		.formLogin()
-			.loginProcessingUrl("/login")
+//			.loginProcessingUrl("/login")
 			.loginPage("/login")
 			.usernameParameter("id")
 			.passwordParameter("pw")
@@ -75,7 +78,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.logoutSuccessUrl("/")
 			.and()
 		.headers();	// 브라우저의 페이지 캐싱 방지
-		
 	}
-
+	
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+		// resources와 같은 정적 저장소에 접근하면 시큐리티 설정을 무시하도록 한다 .
+		web.ignoring().antMatchers("/resources/**"); 
+	}
 }

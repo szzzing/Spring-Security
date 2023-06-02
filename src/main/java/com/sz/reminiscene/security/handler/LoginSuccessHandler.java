@@ -11,12 +11,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import com.sz.reminiscene.security.CustomUserDetails;
+
 @Component
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-		UserDetails user = (UserDetails)authentication.getPrincipal();
-		System.out.println(user.getAuthorities());
-		response.sendRedirect(request.getContextPath()+"/");
+		CustomUserDetails user = (CustomUserDetails)authentication.getPrincipal();
+		
+		if(user.getAuthority().equals("A")) {
+			response.sendRedirect(request.getContextPath()+"/admin");
+		} else {
+			response.sendRedirect(request.getContextPath()+"/");
+		}
 	}
 }

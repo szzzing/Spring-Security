@@ -17,6 +17,7 @@ public class CustomUserDetails implements UserDetails {
 	
 	private String id;
 	private String pw;
+	private String nickname;
 	private String email;
 	private int enabled;
 	private Date enrollDate;

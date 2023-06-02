@@ -3,9 +3,11 @@
 <configuration>
 	<typeAliases>
 		<typeAlias type="com.sz.reminiscene.security.CustomUserDetails" alias="UserDetails"/>
+		<typeAlias type="com.sz.reminiscene.dto.Member" alias="Member"/>
 	</typeAliases>
 	
 	<mappers>
 		<mapper resource="mapper/securityMapper.xml"></mapper>
+		<mapper resource="mapper/memberMapper.xml"></mapper>
 	</mappers>
 </configuration>

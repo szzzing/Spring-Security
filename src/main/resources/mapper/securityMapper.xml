@@ -12,6 +12,7 @@
   	<resultMap type="UserDetails" id="UserDetailsSet">
 		<id column="ID" property="id" />
 		<result column="PW" property="pw" />
+		<result column="NICKNAME" property="nickname" />
 		<result column="EMAIL" property="email" />
 		<result column="ENROLL_DATE" property="enrollDate" />
 		<result column="ENABLED" property="enabled" />
